@@ -1,0 +1,18 @@
+
+Now:
+
+- add api documentation with swagger for Controller api
+- convert to DTO and add real-world use cases 
+    - (Promotions vs Pizza Order?)
+    - 
+- add a sql server
+- add authentication
+- seed the Toppings DB
+- configure Secret Manager to hold env vars like connection string
+
+Later:
+
+- how does EF Core define fields as unique?
+
+    - Adding duplicate toppings to a pizza should be idempotent?
+    - Currently returns a validation error if duplicate topping is added.
