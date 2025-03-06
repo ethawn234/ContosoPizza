@@ -1,6 +1,7 @@
 using ContosoPizza.Models;
 using ContosoPizza.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ContosoPizza.Services;
 
@@ -24,10 +25,11 @@ public class PizzaService
         // The AsNoTracking extension method instructs EF Core to disable change tracking. Because this operation is read-only, AsNoTracking can optimize performance.
         // All of the pizzas are returned with ToList.
         // Remember to include the toppings & sauce in the response.
+        
         return _context.Pizzas
             .Include(p => p.Toppings)
             .Include(p => p.Sauce)
-            .AsNoTracking()
+            .AsNoTracking() // faster for readonly purpose
             .ToList();
     }
 
@@ -45,6 +47,7 @@ public class PizzaService
         .Include(p => p.Sauce)
         .AsNoTracking()
         .SingleOrDefault(p => p.Id == id);
+
     }
 
     public async Task<Pizza> Create(Pizza newPizza)
@@ -117,5 +120,15 @@ public class PizzaService
             _context.Pizzas.Remove(pizza);
             _context.SaveChanges();
         }
+    }
+
+    public PizzaDTO ItemToDTO(Pizza pizza)
+    {
+        return new() {
+            Id = pizza.Id,
+            Name = pizza.Name,
+            Toppings = pizza.Toppings,
+            Sauce = pizza.Sauce
+        };
     }
 }

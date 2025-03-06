@@ -16,13 +16,20 @@ public class ContosoPizzaController : ControllerBase
         _service = service;
         _pizzaLogger = logger;
     }
+
+    [HttpGet("admin")]
+    public IEnumerable<Pizza> GetAdmin()
+    {
+        return _service.GetAll();
+    }
+
     /// <summary>
     /// Fetches all pizzas
     /// </summary>
     /// <returns>A List of Pizzas</returns>
     [HttpGet]
     [Produces("application/json")]
-    public IEnumerable<Pizza> GetAll()
+    public IEnumerable<PizzaDTO> GetAll()
     {   
         var pizzas = _service.GetAll();
          _pizzaLogger.LogWarning("Fetching all Pizzas: {}.", pizzas); // Fetching all Pizzas: ContosoPizza.Models.Pizza, ContosoPizza.Models.Pizza, ContosoPizza.Models.Pizza, ContosoPizza.Models.Pizza.
@@ -32,7 +39,7 @@ public class ContosoPizzaController : ControllerBase
             _pizzaLogger.LogWarning("{}: {}.", pizza.Name, pizza.Toppings); // Only Name: (null)...
         }
         
-        return _service.GetAll();
+        return pizzas.Select(_service.ItemToDTO);
     }
 
     /// <summary>
@@ -44,13 +51,13 @@ public class ContosoPizzaController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Produces("application/json")]
-    public ActionResult<Pizza> GetById(int id)
+    public ActionResult<PizzaDTO> GetById(int id)
     {
         var pizza = _service.GetById(id);
 
         if(pizza is not null)
         {
-            return pizza;
+            return _service.ItemToDTO(pizza);
         }
         else
         {
@@ -78,7 +85,7 @@ public class ContosoPizzaController : ControllerBase
     public async Task<IActionResult> Create(Pizza newPizza)
     {
         var pizza = await _service.Create(newPizza);
-        return CreatedAtAction(nameof(GetById), new { id = pizza!.Id }, pizza);
+        return CreatedAtAction(nameof(GetById), new { id = pizza!.Id }, _service.ItemToDTO(pizza));
     }
 
     /// <summary>
@@ -153,4 +160,6 @@ public class ContosoPizzaController : ControllerBase
             return NotFound();
         }
     }
+
+
 }
