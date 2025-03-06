@@ -19,16 +19,7 @@ public class PizzaService
         _context = context;
     }
 
-    public IEnumerable<Pizza> GetAllAdmin()
-    {
-        return _context.Pizzas
-            .Include(p => p.Toppings)
-            .Include(p => p.Sauce)
-            .AsNoTracking()
-            .ToList();
-    }
-
-    public IEnumerable<PizzaDTO> GetAll()
+    public IEnumerable<Pizza> GetAll()
     {
         // The Pizzas collection contains all the rows in the pizzas table.
         // The AsNoTracking extension method instructs EF Core to disable change tracking. Because this operation is read-only, AsNoTracking can optimize performance.
@@ -38,8 +29,7 @@ public class PizzaService
         return _context.Pizzas
             .Include(p => p.Toppings)
             .Include(p => p.Sauce)
-            .Select(p => ItemToDTO(p))
-            .AsNoTracking()
+            .AsNoTracking() // faster for readonly purpose
             .ToList();
     }
 
@@ -57,6 +47,7 @@ public class PizzaService
         .Include(p => p.Sauce)
         .AsNoTracking()
         .SingleOrDefault(p => p.Id == id);
+
     }
 
     public async Task<Pizza> Create(Pizza newPizza)
@@ -131,10 +122,11 @@ public class PizzaService
         }
     }
 
-    public static PizzaDTO ItemToDTO(Pizza pizza)
+    public PizzaDTO ItemToDTO(Pizza pizza)
     {
         return new() {
             Id = pizza.Id,
+            Name = pizza.Name,
             Toppings = pizza.Toppings,
             Sauce = pizza.Sauce
         };
