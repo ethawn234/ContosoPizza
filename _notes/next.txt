@@ -4,7 +4,9 @@ Now:
 - add api documentation with swagger for Controller api
 - convert to DTO and add real-world use cases 
     - (Promotions vs Pizza Order?)
-    - 
+    - Steps:
+        1. Create helper method to convert Model -> DTOModel
+        2. Refactor handlers and routers to use DTO as needed
 - add a sql server
 - add authentication
 - seed the Toppings DB
