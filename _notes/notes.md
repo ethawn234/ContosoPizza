@@ -1,0 +1,1 @@
+You can experiment with the app. Whenever you'd like to start with a fresh database, stop the app and delete the ContosoPizza.db, .db-shm, and .db-wal files. Then, run the app again.

@@ -1,0 +1,33 @@
+@ContosoPizza_HostAddress = https://localhost:7030
+# @ContosoPizza_HostAddress = http://localhost:5122
+
+# GET {{ContosoPizza_HostAddress}}/weatherforecast
+# Accept: application/json
+
+###
+GET {{ContosoPizza_HostAddress}}/pizza
+Accept: application/json
+
+###
+GET {{ContosoPizza_HostAddress}}/pizza/3
+Accept: application/json
+
+###
+POST {{ContosoPizza_HostAddress}}/pizza
+Content-Type: application/json
+
+{
+  "Name": "Pepperoni"
+}
+###
+PUT {{ContosoPizza_HostAddress}}/pizza/3/addtopping
+Content-Type: application/json
+
+{
+  "toppingId": 0
+}
+
+###
+DELETE {{ContosoPizza_HostAddress}}/pizza/2
+
+###
