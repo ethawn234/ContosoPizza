@@ -7,6 +7,7 @@ Now:
     - Steps:
         1. Create helper method to convert Model -> DTOModel
         2. Refactor handlers and routers to use DTO as needed
+            *Refactor Services/Routers so that services only handles conversion; routers can handle presentation. This also eliminates the need for a separate handler for GetAdmin() & GetAll().
             - GetAll():
                 1. get the pizzas list
                 2. include the toppings and sauce
@@ -15,6 +16,7 @@ Now:
 - add authentication
 - seed the Toppings DB
 - configure Secret Manager to hold env vars like connection string
+- better error handling/response
 
 Later:
 
