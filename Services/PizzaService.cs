@@ -1,6 +1,7 @@
 using ContosoPizza.Models;
 using ContosoPizza.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ContosoPizza.Services;
 
@@ -18,15 +19,26 @@ public class PizzaService
         _context = context;
     }
 
-    public IEnumerable<Pizza> GetAll()
+    public IEnumerable<Pizza> GetAllAdmin()
+    {
+        return _context.Pizzas
+            .Include(p => p.Toppings)
+            .Include(p => p.Sauce)
+            .AsNoTracking()
+            .ToList();
+    }
+
+    public IEnumerable<PizzaDTO> GetAll()
     {
         // The Pizzas collection contains all the rows in the pizzas table.
         // The AsNoTracking extension method instructs EF Core to disable change tracking. Because this operation is read-only, AsNoTracking can optimize performance.
         // All of the pizzas are returned with ToList.
         // Remember to include the toppings & sauce in the response.
+        
         return _context.Pizzas
             .Include(p => p.Toppings)
             .Include(p => p.Sauce)
+            .Select(p => ItemToDTO(p))
             .AsNoTracking()
             .ToList();
     }
@@ -117,5 +129,14 @@ public class PizzaService
             _context.Pizzas.Remove(pizza);
             _context.SaveChanges();
         }
+    }
+
+    public static PizzaDTO ItemToDTO(Pizza pizza)
+    {
+        return new() {
+            Id = pizza.Id,
+            Toppings = pizza.Toppings,
+            Sauce = pizza.Sauce
+        };
     }
 }

@@ -16,13 +16,20 @@ public class ContosoPizzaController : ControllerBase
         _service = service;
         _pizzaLogger = logger;
     }
+
+    [HttpGet("admin")]
+    public IEnumerable<Pizza> GetAdmin()
+    {
+        return _service.GetAllAdmin();
+    }
+
     /// <summary>
     /// Fetches all pizzas
     /// </summary>
     /// <returns>A List of Pizzas</returns>
     [HttpGet]
     [Produces("application/json")]
-    public IEnumerable<Pizza> GetAll()
+    public IEnumerable<PizzaDTO> GetAll()
     {   
         var pizzas = _service.GetAll();
          _pizzaLogger.LogWarning("Fetching all Pizzas: {}.", pizzas); // Fetching all Pizzas: ContosoPizza.Models.Pizza, ContosoPizza.Models.Pizza, ContosoPizza.Models.Pizza, ContosoPizza.Models.Pizza.
@@ -153,4 +160,6 @@ public class ContosoPizzaController : ControllerBase
             return NotFound();
         }
     }
+
+
 }

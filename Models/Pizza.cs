@@ -13,5 +13,5 @@ public class Pizza
     public Sauce? Sauce { get; set; }
     
     public ICollection<Topping>? Toppings { get; set; }
-    private string? Secret { get; set; }
+    public string? Secret { get; set; }
 }
