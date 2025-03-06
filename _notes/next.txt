@@ -4,11 +4,19 @@ Now:
 - add api documentation with swagger for Controller api
 - convert to DTO and add real-world use cases 
     - (Promotions vs Pizza Order?)
-    - 
+    - Steps:
+        1. Create helper method to convert Model -> DTOModel
+        2. Refactor handlers and routers to use DTO as needed
+            *Refactor Services/Routers so that services only handles conversion; routers can handle presentation. This also eliminates the need for a separate handler for GetAdmin() & GetAll().
+            - GetAll():
+                1. get the pizzas list
+                2. include the toppings and sauce
+                3. convert to DTO and return
 - add a sql server
 - add authentication
 - seed the Toppings DB
 - configure Secret Manager to hold env vars like connection string
+- better error handling/response
 
 Later:
 
