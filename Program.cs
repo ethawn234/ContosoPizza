@@ -4,10 +4,19 @@ using ContosoPizza.Data;
 using ContosoPizza.Services;
 using System.Reflection;
 
-// Additional using declarations
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddCors(opts =>
+{
+    opts.AddPolicy(name: MyAllowSpecificOrigins,
+    policy => 
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 // Registers PizzaContext with the ASP.NET Core dependency injection system.
 // Specifies that PizzaContext uses the SQLite database provider.
@@ -57,7 +66,7 @@ if (app.Environment.IsDevelopment())
         opts.RoutePrefix = string.Empty;
     });
 }
-
+app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthorization();
 
 app.MapControllers();
