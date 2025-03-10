@@ -12,6 +12,16 @@ Now:
                 1. get the pizzas list
                 2. include the toppings and sauce
                 3. convert to DTO and return
+- add cors
+- style Pizza Component with basic table
+    - string Toppings & Sauce (appears as objs currently)
+- review client api scaffolding
+    - implement the rest of the client api handlers
+    - implement client types
+
+
+
+- setup client Pages & Components
 - add a sql server
 - add authentication
 - seed the Toppings DB
