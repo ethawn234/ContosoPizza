@@ -10,14 +10,20 @@ public class ContosoPizzaController : ControllerBase
 {
     PizzaService _service;
     private readonly ILogger _pizzaLogger;
-    
+
     public ContosoPizzaController(PizzaService service, ILogger<ContosoPizzaController> logger)
     {
         _service = service;
         _pizzaLogger = logger;
     }
 
+    /// <summary>
+    /// Admin Fetch returns all fields including secret fields
+    /// </summary>
+    /// <returns>A list of pizzas with their secrets</returns>
     [HttpGet("admin")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [Produces("application/json")]
     public IEnumerable<Pizza> GetAdmin()
     {
         return _service.GetAll();
@@ -28,17 +34,18 @@ public class ContosoPizzaController : ControllerBase
     /// </summary>
     /// <returns>A List of Pizzas</returns>
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [Produces("application/json")]
     public IEnumerable<PizzaDTO> GetAll()
-    {   
+    {
         var pizzas = _service.GetAll();
-         _pizzaLogger.LogWarning("Fetching all Pizzas: {}.", pizzas); // Fetching all Pizzas: ContosoPizza.Models.Pizza, ContosoPizza.Models.Pizza, ContosoPizza.Models.Pizza, ContosoPizza.Models.Pizza.
-        
+        _pizzaLogger.LogWarning("Fetching all Pizzas: {}.", pizzas); // Fetching all Pizzas: ContosoPizza.Models.Pizza, ContosoPizza.Models.Pizza, ContosoPizza.Models.Pizza, ContosoPizza.Models.Pizza.
+
         foreach (var pizza in pizzas)
         {
             _pizzaLogger.LogWarning("{}: {}.", pizza.Name, pizza.Toppings); // Only Name: (null)...
         }
-        
+
         return pizzas.Select(_service.ItemToDTO);
     }
 
@@ -55,7 +62,7 @@ public class ContosoPizzaController : ControllerBase
     {
         var pizza = _service.GetById(id);
 
-        if(pizza is not null)
+        if (pizza is not null)
         {
             return _service.ItemToDTO(pizza);
         }
@@ -71,13 +78,16 @@ public class ContosoPizzaController : ControllerBase
     /// <param name="newPizza"></param>
     /// <returns>The Pizza</returns>
     /// <remarks>
-    ///  Sample request:
+    /// Sample request:
+    ///     <code>
     ///     POST /ContosoPizza
-    ///     {
-    ///         "id": 0,
-    ///         "name": "Pepperoni Stuffed Crust"
-    ///     }
+    ///         {
+    ///             "id": 0,
+    ///             "name": "Pepperoni Stuffed Crust"
+    ///         }
+    ///     </code>   
     ///  </remarks>
+    ///  
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -102,10 +112,10 @@ public class ContosoPizzaController : ControllerBase
     {
         var pizzaToUpdate = _service.GetById(pizzaId);
 
-        if(pizzaToUpdate is not null)
+        if (pizzaToUpdate is not null)
         {
             _service.AddTopping(pizzaId, toppingId);
-            return NoContent();    
+            return NoContent();
         }
         else
         {
@@ -127,10 +137,10 @@ public class ContosoPizzaController : ControllerBase
     {
         var pizzaToUpdate = _service.GetById(id);
 
-        if(pizzaToUpdate is not null)
+        if (pizzaToUpdate is not null)
         {
             _service.UpdateSauce(id, sauceId);
-            return NoContent();    
+            return NoContent();
         }
         else
         {
@@ -150,7 +160,7 @@ public class ContosoPizzaController : ControllerBase
     {
         var pizza = _service.GetById(id);
 
-        if(pizza is not null)
+        if (pizza is not null)
         {
             _service.DeleteById(id);
             return Ok();
