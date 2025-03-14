@@ -4,13 +4,13 @@ using ContosoPizza.Data;
 using ContosoPizza.Services;
 using System.Reflection;
 
-var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(opts =>
 {
     opts.AddPolicy(name: MyAllowSpecificOrigins,
-    policy => 
+    policy =>
     {
         policy.WithOrigins("http://localhost:5173")
               .AllowAnyHeader()

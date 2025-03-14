@@ -10,21 +10,21 @@ namespace ContosoPizza.Controllers;
 [Route("api/[controller]")]
 public class CouponController(PromotionsContext context, ILogger<CouponController> logger) : ControllerBase // A PromotionsContext is injected into controller via Primary Constructor DI.
 {
-  
+
   PromotionsContext _context = context;
   private readonly ILogger _logger = logger;
 
   /// <summary>
-    /// View the Promotions
-    /// </summary>
-    /// <returns>List of Promotions</returns>
+  /// View the Promotions
+  /// </summary>
+  /// <returns>List of Promotions</returns>
   [HttpGet]
   [Produces("application/json")]
   public IEnumerable<Coupon> Get()
   {
     _logger.LogInformation("Fetching coupons...");
 
-    foreach(var coupon in _context.Coupons)
+    foreach (var coupon in _context.Coupons)
     {
       _logger.LogInformation("INFO: Id: {}, Expiration: {}, Description: {}", coupon.Id, coupon.Expiration, coupon.Description);
       _logger.LogCritical("CRITICAL: Id: {}, Expiration: {}, Description: {}", coupon.Id, coupon.Expiration, coupon.Description);
