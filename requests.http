@@ -1,26 +1,26 @@
-@ContosoPizza_HostAddress = https://localhost:7030
+@ContosoPizza_HostAddress = https://localhost:7030/ContosoPizza
 # @ContosoPizza_HostAddress = http://localhost:5122
 
 # GET {{ContosoPizza_HostAddress}}/weatherforecast
 # Accept: application/json
 
 ###
-GET {{ContosoPizza_HostAddress}}/pizza
+GET {{ContosoPizza_HostAddress}}
 Accept: application/json
 
 ###
-GET {{ContosoPizza_HostAddress}}/pizza/3
+GET {{ContosoPizza_HostAddress}}/3
 Accept: application/json
 
 ###
-POST {{ContosoPizza_HostAddress}}/pizza
+POST {{ContosoPizza_HostAddress}}
 Content-Type: application/json
 
 {
   "Name": "Pepperoni"
 }
 ###
-PUT {{ContosoPizza_HostAddress}}/pizza/3/addtopping
+PUT {{ContosoPizza_HostAddress}}/4/addtopping
 Content-Type: application/json
 
 {
@@ -28,6 +28,6 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{ContosoPizza_HostAddress}}/pizza/2
+DELETE {{ContosoPizza_HostAddress}}/2
 
 ###
