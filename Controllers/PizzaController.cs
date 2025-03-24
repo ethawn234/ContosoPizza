@@ -94,7 +94,24 @@ public class ContosoPizzaController : ControllerBase
     [Produces("application/json")]
     public async Task<IActionResult> Create(Pizza newPizza)
     {
+        // var toppings = 0;
+        var sauce = 0;
+        if(newPizza.Sauce != null)
+        {
+            sauce = newPizza.Sauce.Id;
+            newPizza.Sauce = null;
+        }
+        // if(newPizza.Toppings != null)
+        // {
+            
+        // }
         var pizza = await _service.Create(newPizza);
+
+        if(sauce != 0)
+        {
+            _service.AddTopping(pizza.Id, sauce);
+        }
+
         return CreatedAtAction(nameof(GetById), new { id = pizza!.Id }, _service.ItemToDTO(pizza));
     }
 
