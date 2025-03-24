@@ -25,7 +25,7 @@ public class PizzaService
         // The AsNoTracking extension method instructs EF Core to disable change tracking. Because this operation is read-only, AsNoTracking can optimize performance.
         // All of the pizzas are returned with ToList.
         // Remember to include the toppings & sauce in the response.
-        
+
         return _context.Pizzas
             .Include(p => p.Toppings)
             .Include(p => p.Sauce)
@@ -47,18 +47,36 @@ public class PizzaService
         .Include(p => p.Sauce)
         .AsNoTracking()
         .SingleOrDefault(p => p.Id == id);
-
     }
 
-    public async Task<Pizza> Create(Pizza newPizza)
+    public async Task<PizzaDTO> Create(PizzaCreateBody pizzaCreateBody)
     {
-        // newPizza is assumed to be a valid object. EF Core doesn't do data validation, so the ASP.NET Core runtime or user code must handle any validation.
-        // The Add method adds the newPizza entity to the EF Core object graph.
-        // The SaveChanges method instructs EF Core to persist the object changes to the database.
-        _context.Pizzas.Add(newPizza);
+        // create the pizza
+        Pizza pizza = new()
+        {
+            Name = pizzaCreateBody.Name
+        };
+
+        _context.Add(pizza);
         await _context.SaveChangesAsync();
 
-        return newPizza;
+        // add Sauce, if exists
+        if (pizzaCreateBody.SauceId > -1)
+        {
+            UpdateSauce(pizza.Id, pizzaCreateBody.SauceId);
+        }
+
+        // add Toppings, if any
+        if (pizzaCreateBody.ToppingIds.Count > 0)
+        {
+            foreach (var topping in pizzaCreateBody.ToppingIds)
+            {
+                AddTopping(pizza.Id, topping);
+            }
+        }
+
+        await _context.SaveChangesAsync();
+        return ItemToDTO(pizza);
     }
 
     public void AddTopping(int PizzaId, int ToppingId)
@@ -100,7 +118,7 @@ public class PizzaService
         var pizzaToUpdate = _context.Pizzas.Find(PizzaId);
         var sauceToUpdate = _context.Sauces.Find(SauceId);
 
-        if(pizzaToUpdate is null || sauceToUpdate is null)
+        if (pizzaToUpdate is null || sauceToUpdate is null)
         {
             throw new InvalidOperationException("No existing pizza or sauce found");
         }
@@ -122,9 +140,22 @@ public class PizzaService
         }
     }
 
+    public Pizza ItemToPizza(PizzaDTO pizzaDTO)
+    {
+        return new()
+        {
+            Id = pizzaDTO.Id,
+            Name = pizzaDTO.Name,
+            Sauce = pizzaDTO.Sauce,
+            Toppings = pizzaDTO.Toppings,
+            Secret = null
+        };
+    }
+
     public PizzaDTO ItemToDTO(Pizza pizza)
     {
-        return new() {
+        return new()
+        {
             Id = pizza.Id,
             Name = pizza.Name,
             Toppings = pizza.Toppings,
