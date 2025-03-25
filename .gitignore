@@ -292,3 +292,6 @@ __pycache__/
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore,visualstudiocode
+ContosoPizza.db-wal
+ContosoPizza.db
+ContosoPizza.db-shm
