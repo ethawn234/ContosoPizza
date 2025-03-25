@@ -1,9 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using System.Numerics;
 
 namespace ContosoPizza.Models;
 
-public class PizzaCreateBody
+public class PizzaCreateDTO
 {
     public int Id { get; set; }
     [Required]

@@ -49,33 +49,33 @@ public class PizzaService
         .SingleOrDefault(p => p.Id == id);
     }
 
-    public async Task<PizzaDTO> Create(PizzaCreateBody pizzaCreateBody)
+    public async Task<Pizza> Create(PizzaCreateDTO pizzaCreateDTO)
     {
         // create the pizza
         Pizza pizza = new()
         {
-            Name = pizzaCreateBody.Name
+            Name = pizzaCreateDTO.Name
         };
 
         _context.Add(pizza);
         await _context.SaveChangesAsync();
 
         // add Sauce, if exists
-        if (pizzaCreateBody.SauceId > 0)
+        if (pizzaCreateDTO.SauceId > 0)
         {
-            UpdateSauce(pizza.Id, pizzaCreateBody.SauceId);
+            UpdateSauce(pizza.Id, pizzaCreateDTO.SauceId);
         }
 
         // add Toppings, if any
-        if (pizzaCreateBody.ToppingIds.Count > 0)
+        if (pizzaCreateDTO.ToppingIds.Count > 0)
         {
-            foreach (var topping in pizzaCreateBody.ToppingIds)
+            foreach (var topping in pizzaCreateDTO.ToppingIds)
             {
                 AddTopping(pizza.Id, topping);
             }
         }
 
-        return ItemToDTO(pizza);
+        return pizza;
     }
 
     public void AddTopping(int PizzaId, int ToppingId)

@@ -75,7 +75,7 @@ public class ContosoPizzaController : ControllerBase
     /// <summary>
     /// Create a new Pizza
     /// </summary>
-    /// <param name="pizzaCreateBody"></param>
+    /// <param name="pizzaCreateDTO"></param>
     /// <returns>The Pizza</returns>
     /// <remarks>
     /// Sample request:
@@ -92,11 +92,11 @@ public class ContosoPizzaController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [Produces("application/json")]
-    public async Task<IActionResult> Create(PizzaCreateBody pizzaCreateBody)
+    public async Task<IActionResult> Create(PizzaCreateDTO pizzaCreateDTO)
     {
-        var pizza = await _service.Create(pizzaCreateBody);
+        var pizza = await _service.Create(pizzaCreateDTO);
 
-        return CreatedAtAction(nameof(GetById), new { id = pizza!.Id }, pizza);
+        return CreatedAtAction(nameof(GetById), new { id = pizza!.Id }, _service.ItemToDTO(pizza));
     }
 
     /// <summary>
