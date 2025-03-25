@@ -61,7 +61,7 @@ public class PizzaService
         await _context.SaveChangesAsync();
 
         // add Sauce, if exists
-        if (pizzaCreateBody.SauceId > -1)
+        if (pizzaCreateBody.SauceId > 0)
         {
             UpdateSauce(pizza.Id, pizzaCreateBody.SauceId);
         }
@@ -75,7 +75,6 @@ public class PizzaService
             }
         }
 
-        await _context.SaveChangesAsync();
         return ItemToDTO(pizza);
     }
 
