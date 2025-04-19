@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Models;
 using ContosoPizza.Data;
 using ContosoPizza.Services;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -22,8 +23,11 @@ builder.Services.AddCors(opts =>
 // Specifies that PizzaContext uses the SQLite database provider.
 // Defines a SQLite connection string that points to a local file, ContosoPizza.db.
 // SQLite uses local database files, so it's okay to hard-code the connection string. For network databases like PostgreSQL and SQL Server, you should always store your connection strings securely. For local development, use Secret Manager. For production deployments, consider using a service like Azure Key Vault.
-builder.Services.AddSqlite<PizzaContext>("Data Source=ContosoPizza.db");
-builder.Services.AddSqlite<PromotionsContext>("Data Source=Promotions/Promotions.db");
+    // builder.Services.AddSqlite<PizzaContext>("Data Source=ContosoPizza.db");
+    // builder.Services.AddSqlite<PromotionsContext>("Data Source=Promotions/Promotions.db");
+
+// builder.Services.AddDbContext<PizzaContext>(options =>
+//     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<PizzaService>();
 builder.Services.AddControllers();
