@@ -11,6 +11,13 @@ public class PizzaContext : DbContext
   // Enable sensitive data logging
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.EnableSensitiveDataLogging();
 
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Topping>()
+          .Property(t => t.Calories)
+          .HasPrecision(4, 1); // 4 total digits, 1 total digt after decimal
+    }
+
   // The DbSet<T> properties correspond to tables to create in the database.
   // The table names match the DbSet<T> property names in the PizzaContext class. You can override this behavior if needed.
   // When instantiated, PizzaContext exposes the Pizzas, Toppings, and Sauces properties. Changes you make to the collections that those properties expose are propagated to the database.
