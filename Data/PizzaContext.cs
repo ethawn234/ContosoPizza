@@ -13,6 +13,18 @@ public class PizzaContext : DbContext
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // explicitly define PKs
+        // improve logic with BaseConfig.Id; allows clean common config declarations
+        modelBuilder.Entity<Pizza>(entity => {
+          entity.HasKey(k => k.Id);
+        });
+        modelBuilder.Entity<Topping>(entity => {
+          entity.HasKey(k => k.Id);
+        });
+        modelBuilder.Entity<Sauce>(entity => {
+          entity.HasKey(k => k.Id);
+        });
+        
         modelBuilder.Entity<Topping>()
           .Property(t => t.Calories)
           .HasPrecision(4, 1); // 4 total digits, 1 total digt after decimal
