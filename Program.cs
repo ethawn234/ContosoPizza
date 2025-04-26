@@ -3,18 +3,38 @@ using Microsoft.OpenApi.Models;
 using ContosoPizza.Data;
 using ContosoPizza.Services;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
-// Additional using declarations
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddCors(opts =>
+{
+    opts.AddPolicy(name: MyAllowSpecificOrigins,
+    policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 // Registers PizzaContext with the ASP.NET Core dependency injection system.
 // Specifies that PizzaContext uses the SQLite database provider.
 // Defines a SQLite connection string that points to a local file, ContosoPizza.db.
 // SQLite uses local database files, so it's okay to hard-code the connection string. For network databases like PostgreSQL and SQL Server, you should always store your connection strings securely. For local development, use Secret Manager. For production deployments, consider using a service like Azure Key Vault.
-builder.Services.AddSqlite<PizzaContext>("Data Source=ContosoPizza.db");
-builder.Services.AddSqlite<PromotionsContext>("Data Source=Promotions/Promotions.db");
+    // builder.Services.AddSqlite<PizzaContext>("Data Source=ContosoPizza.db");
+    // builder.Services.AddSqlite<PromotionsContext>("Data Source=Promotions/Promotions.db");
+    
+// Connection String Syntax: "Server=<SQLServerAddress|localhost>;<Initial Catalog|Database>=<DataBaseName|ContosoPizza>;User Id=Username;Password=UserPassword;"
+var connectionString = builder.Configuration.GetConnectionString("ContosoPizzaCon")
+        ?? throw new InvalidOperationException("Connection string"
+        + "'DefaultConnection' not found.");
+builder.Services.AddDbContext<PizzaContext>(options =>
+    options.UseSqlServer(
+        connectionString,
+        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()    
+    ));
 
 builder.Services.AddScoped<PizzaService>();
 builder.Services.AddControllers();
@@ -56,15 +76,15 @@ if (app.Environment.IsDevelopment())
         opts.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         opts.RoutePrefix = string.Empty;
     });
+
+    // Steps for calling seed logic
+    // using var scope = app.Services.CreateScope();
+    // var context = scope.ServiceProvider.GetRequiredService<PizzaContext>();
+    // await DbInitializer.Initialize(context);
+    await app.CreateDbIfNotExists(); // Calls the extension method Data/Extensions.cs each time the app runs.
 }
-
+app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthorization();
-
 app.MapControllers();
-
-// Add the CreateDbIfNotExists method call
-app.CreateDbIfNotExists(); // Calls the extension method Data/Extensions.cs each time the app runs.
-
 app.MapGet("/", () => @"Contoso Pizza management API. Navigate to /swagger to open the Swagger test UI.");
-
 app.Run();

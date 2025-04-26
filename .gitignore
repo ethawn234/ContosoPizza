@@ -26,6 +26,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 
+*.db
 # Visual Studio 2015 cache/options directory
 .vs/
 # Uncomment if you have tasks that create the project's static files in wwwroot
@@ -153,6 +154,8 @@ publish/
 # but database connection strings (with potential passwords) will be unencrypted
 *.pubxml
 *.publishproj
+
+appsettings.json
 
 # Microsoft Azure Web App publish settings. Comment the next line if you want to
 # checkin your Azure Web App publish settings, but sensitive information contained
@@ -291,3 +294,6 @@ __pycache__/
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore,visualstudiocode
+ContosoPizza.db-wal
+ContosoPizza.db
+ContosoPizza.db-shm

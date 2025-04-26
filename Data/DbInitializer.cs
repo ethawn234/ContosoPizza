@@ -1,4 +1,5 @@
 using ContosoPizza.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContosoPizza.Data
 {
@@ -6,29 +7,24 @@ namespace ContosoPizza.Data
   public static class DbInitializer
   {
     // The DbInitializer class and Initialize method are both defined as static.
-    public static void Initialize(PizzaContext context) // Initialize accepts a PizzaContext object as a parameter.
-    { 
+    public static async Task Initialize(PizzaContext context) // Initialize accepts a PizzaContext object as a parameter.
+    {
       // If there are no records in any of the three tables, Pizza, Sauce, and Topping objects are created.
-      if(context.Pizzas.Any() // Any() == (context.Pizzas.Count()!=0)
-        && context.Toppings.Any()
-        && context.Sauces.Any())
-        {
-          return; // DB has been seeded
-        }
+      if (await context.Pizzas.AnyAsync()) return;
 
-        // create Toppings
-        var pepperoniTopping = new Topping { Name = "Pepperoni", Calories = 130 };
-        var sausageTopping = new Topping { Name = "Sausage", Calories = 100 };
-        var hamTopping = new Topping { Name = "Ham", Calories = 70 };
-        var chickenTopping = new Topping { Name = "Chicken", Calories = 50 };
-        var pineappleTopping = new Topping { Name = "Pineapple", Calories = 75 };
+      // create Toppings
+      var pepperoniTopping = new Topping { Name = "Pepperoni", Calories = 130 };
+      var sausageTopping = new Topping { Name = "Sausage", Calories = 100 };
+      var hamTopping = new Topping { Name = "Ham", Calories = 70 };
+      var chickenTopping = new Topping { Name = "Chicken", Calories = 50 };
+      var pineappleTopping = new Topping { Name = "Pineapple", Calories = 75 };
 
-        // create Sauces
-        var tomatoSauce = new Sauce { Name = "Tomato", IsVegan = true };        
-        var pestoSauce = new Sauce { Name = "Pesto", IsVegan = false };
+      // create Sauces
+      var tomatoSauce = new Sauce { Name = "Tomato", IsVegan = true };
+      var pestoSauce = new Sauce { Name = "Pesto", IsVegan = false };
 
-        // create Pizzas
-        var pizzas = new Pizza[]{
+      // create Pizzas
+      var pizzas = new Pizza[]{
           new() {
             Name = "Pepperoni Delight",
             Sauce = tomatoSauce,
@@ -48,9 +44,11 @@ namespace ContosoPizza.Data
               }
           }
         };
-    
-        context.Pizzas.AddRange(pizzas); // The Pizza objects (and their Sauce and Topping navigation properties) are added to the object graph by using AddRange.
-        context.SaveChanges(); // The object graph changes are committed to the database by using SaveChanges.
+
+      // context.Pizzas.AddRange(pizzas); // The Pizza objects (and their Sauce and Topping navigation properties) are added to the object graph by using AddRange.
+      // context.SaveChanges(); // The object graph changes are committed to the database by using SaveChanges.
+      await context.Pizzas.AddRangeAsync(pizzas);
+      await context.SaveChangesAsync();
     }
   }
 }
