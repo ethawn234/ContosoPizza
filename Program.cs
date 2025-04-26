@@ -26,7 +26,7 @@ builder.Services.AddCors(opts =>
     // builder.Services.AddSqlite<PizzaContext>("Data Source=ContosoPizza.db");
     // builder.Services.AddSqlite<PromotionsContext>("Data Source=Promotions/Promotions.db");
     
-// Connection String Syntax: Server=SQLServerAddress;Database=DataBaseName;User Id=Username;Password=UserPassword;
+// Connection String Syntax: "Server=<SQLServerAddress|localhost>;<Initial Catalog|Database>=<DataBaseName|ContosoPizza>;User Id=Username;Password=UserPassword;"
 var connectionString = builder.Configuration.GetConnectionString("ContosoPizzaCon")
         ?? throw new InvalidOperationException("Connection string"
         + "'DefaultConnection' not found.");
