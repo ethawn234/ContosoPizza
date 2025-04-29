@@ -19,21 +19,15 @@ builder.Services.AddCors(opts =>
     });
 });
 
-// Registers PizzaContext with the ASP.NET Core dependency injection system.
-// Specifies that PizzaContext uses the SQLite database provider.
-// Defines a SQLite connection string that points to a local file, ContosoPizza.db.
-// SQLite uses local database files, so it's okay to hard-code the connection string. For network databases like PostgreSQL and SQL Server, you should always store your connection strings securely. For local development, use Secret Manager. For production deployments, consider using a service like Azure Key Vault.
-    // builder.Services.AddSqlite<PizzaContext>("Data Source=ContosoPizza.db");
-    // builder.Services.AddSqlite<PromotionsContext>("Data Source=Promotions/Promotions.db");
-    
+// dotnet user-secrets set "Movies:ServiceApiKey" "12345": JSON structure { Movies: { ServiceApiKey: "12345" } }
 // Connection String Syntax: "Server=<SQLServerAddress|localhost>;<Initial Catalog|Database>=<DataBaseName|ContosoPizza>;User Id=Username;Password=UserPassword;"
-var connectionString = builder.Configuration.GetConnectionString("ContosoPizzaCon")
-        ?? throw new InvalidOperationException("Connection string"
-        + "'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("ContosoPizzaConn")
+        ?? throw new InvalidOperationException("Connection string: "
+        + builder.Configuration.GetConnectionString("ContosoPizzaConn") ?? "ContosoPizzaConn" + " not found.");
 builder.Services.AddDbContext<PizzaContext>(options =>
     options.UseSqlServer(
         connectionString,
-        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()    
+        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()
     ));
 
 builder.Services.AddScoped<PizzaService>();
