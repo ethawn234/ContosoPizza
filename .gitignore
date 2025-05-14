@@ -297,3 +297,5 @@ __pycache__/
 ContosoPizza.db-wal
 ContosoPizza.db
 ContosoPizza.db-shm
+
+.env
