@@ -21,9 +21,14 @@ builder.Services.AddCors(opts =>
 
 // dotnet user-secrets set "Movies:ServiceApiKey" "12345": JSON structure { Movies: { ServiceApiKey: "12345" } }
 // Connection String Syntax: "Server=<SQLServerAddress|localhost>;<Initial Catalog|Database>=<DataBaseName|ContosoPizza>;User Id=Username;Password=UserPassword;"
-var connectionString = builder.Configuration.GetConnectionString("ContosoPizzaConn")
-        ?? throw new InvalidOperationException("Connection string: "
-        + builder.Configuration.GetConnectionString("ContosoPizzaConn") ?? "ContosoPizzaConn" + " not found.");
+// var connectionString = builder.Configuration.GetConnectionString("ContosoPizzaConn")
+//         ?? throw new InvalidOperationException("Connection string: "
+//         + builder.Configuration.GetConnectionString("ContosoPizzaConn") ?? "ContosoPizzaConn" + " not found.");
+
+// using env var
+DotNetEnv.Env.Load();
+string connectionString = Environment.GetEnvironmentVariable("CONTOSO_PIZZA_CONN") ?? throw new InvalidOperationException("Connection string not found.");
+
 builder.Services.AddDbContext<PizzaContext>(options =>
     options.UseSqlServer(
         connectionString,
