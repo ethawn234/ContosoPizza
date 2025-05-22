@@ -1,0 +1,13 @@
+name: First Workflow # define workflow name
+on: workflow_dispatch # define trigger; current trigger is user trigger
+jobs: #
+  first-job:
+    runs-on: ubuntu-latest # reserved keyword for runner
+    steps:
+      - name: Print greeting # name the step
+        run: echo "Hello World!" # cmd to exec
+      - name: Print goodbye
+        run: echo "Goodbye!"
+
+
+
