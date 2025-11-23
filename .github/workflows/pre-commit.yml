@@ -1,4 +1,6 @@
 name: Use pre-commit
+permissions:
+  contents: read
 
 on:
   workflow_dispatch:
